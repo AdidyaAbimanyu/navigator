@@ -1,49 +1,52 @@
-import React from 'react';
-import { ListGroup, Dropdown } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { FaBars } from 'react-icons/fa'; // Install react-icons if you haven't already: npm install react-icons
 
 const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div className="bg-primary text-white vh-100">
-      <ListGroup variant="flush">
-        <ListGroup.Item className="bg-primary text-white border-0 mt-4">
-          <input type="text" className="form-control" placeholder="Search" />
-        </ListGroup.Item>
-        <ListGroup.Item className="bg-primary text-white border-0">
-          <Dropdown>
-            <Dropdown.Toggle variant="primary" id="dropdown-kota">
-              Kota
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Semarang</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Surakarta</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Yogyakarta</Dropdown.Item>
-              <Dropdown.Item href="#/action-4">Magelang</Dropdown.Item>
-              <Dropdown.Item href="#/action-5">Purwokerto</Dropdown.Item>
-              <Dropdown.Item href="#/action-6">Kudus</Dropdown.Item>
-              <Dropdown.Item href="#/action-7">Klaten</Dropdown.Item>
-              <Dropdown.Item href="#/action-8">Tegal</Dropdown.Item>
-              <Dropdown.Item href="#/action-9">Pekalongan</Dropdown.Item>
-              <Dropdown.Item href="#/action-10">Salatiga</Dropdown.Item>
-              <Dropdown.Item href="#/action-11">Cilacap</Dropdown.Item>
-              <Dropdown.Item href="#/action-12">Sukoharjo</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </ListGroup.Item>
-        <ListGroup.Item className="bg-primary text-white border-0">
-          <Dropdown>
-            <Dropdown.Toggle variant="primary" id="dropdown-bencana">
-              Bencana Alam
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Erupsi</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Tsunami</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Gempa</Dropdown.Item>
-              <Dropdown.Item href="#/action-4">Banjir</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </ListGroup.Item>
-      </ListGroup>
-    </div>
+    <>
+      <div className="absolute top-4 left-4 cursor-pointer z-50" onClick={toggleSidebar}>
+        <FaBars size={24} color="#fff" />
+      </div>
+      {isOpen && (
+        <div className="bg-blue-500 text-white w-64 h-full fixed top-0 left-0 z-40">
+          <div className="p-4 mt-10">
+            <input type="text" className="w-full p-2 rounded" placeholder="Search" />
+          </div>
+          <div className="p-4">
+            <label className="block mb-2">Kota</label>
+            <select className="w-full p-2 rounded bg-blue-600">
+              <option>Semarang</option>
+              <option>Surakarta</option>
+              <option>Yogyakarta</option>
+              <option>Magelang</option>
+              <option>Purwokerto</option>
+              <option>Kudus</option>
+              <option>Klaten</option>
+              <option>Tegal</option>
+              <option>Pekalongan</option>
+              <option>Salatiga</option>
+              <option>Cilacap</option>
+              <option>Sukoharjo</option>
+            </select>
+          </div>
+          <div className="p-4">
+            <label className="block mb-2">Bencana Alam</label>
+            <select className="w-full p-2 rounded bg-blue-600">
+              <option>Erupsi</option>
+              <option>Tsunami</option>
+              <option>Gempa</option>
+              <option>Banjir</option>
+            </select>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
