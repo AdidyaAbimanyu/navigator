@@ -11,7 +11,7 @@ const Sidebar = () => {
   return (
     <>
       <div className="absolute top-4 left-4 cursor-pointer z-50" onClick={toggleSidebar}>
-        <FaBars size={24} color="#fff" />
+        <FaBars size={24} color="#000" />
       </div>
       {isOpen && (
         <div className="bg-blue-500 text-white w-64 h-full fixed top-0 left-0 z-40">
