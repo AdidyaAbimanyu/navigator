@@ -22,7 +22,7 @@ const Sidebar = () => {
             <label className="block mb-2">Kota</label>
             <select className="w-full p-2 rounded bg-blue-600">
               <option>Semarang</option>
-              <option>Surakarta</option>
+              <option>Solo</option>
               <option>Yogyakarta</option>
               <option>Magelang</option>
               <option>Purwokerto</option>
