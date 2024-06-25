@@ -1,15 +1,10 @@
 import os
+import matplotlib.pyplot as plt
 from flask import Flask, render_template, send_file, jsonify, request
-from flask_cors import CORS
 from prototype import *
-import random
-import tempfile
+from city_nodes import city_node_map  # Import city_node_map
 
 app = Flask(__name__)
-CORS(app)
-# Load graph
-place_name = "Solo, Indonesia"
-G = load_graph(place_name)
 
 # Define the directory to save images
 IMAGE_DIR = os.path.join(app.root_path, 'static', 'images')
@@ -25,53 +20,66 @@ def index():
 def send_city():
     data = request.get_json()
     selected_city = data['city']
+
+    # Debug
+    print(data['city'])
     
-    # Lakukan sesuatu dengan selected_city, misalnya memuat graf baru berdasarkan kota tersebut
-    place_name = selected_city
-    G = load_graph(place_name)
+    global G
+    global place_start
+    global place_end
     
+    # Retrieve start and end nodes from city_node_map
+    place_north = city_node_map[selected_city]["north"]
+    place_south = city_node_map[selected_city]["south"]
+    place_east = city_node_map[selected_city]["east"]
+    place_west = city_node_map[selected_city]["west"]
+    place_start = city_node_map[selected_city]["start"]
+    place_end = city_node_map[selected_city]["end"]
+
+    
+    G = load_graph(place_north, place_south, place_east, place_west)
     return jsonify({'message': 'City received and graph loaded successfully!'})
-
-
-@app.route('/run_algorithm')
-def run_algorithm():
-    start = random.choice(list(G.nodes))
-    end = random.choice(list(G.nodes))
-    a_star(G, start, end, plot=True)
-    reconstruct_path(G, start, end, plot=True)
-    return 'Algorithm executed successfully!'
-
-@app.route('/plot_image')
-def plot_image():
-    temp_file = tempfile.NamedTemporaryFile(suffix=".png", delete=False)
-    plot_graph(G, filename=temp_file.name)
-    return send_file(temp_file.name, mimetype='image/png')
 
 @app.route('/route')
 def route():
-    start = random.choice(list(G.nodes))
-    end = random.choice(list(G.nodes))
+    # Use the start and end nodes retrieved based on the city
+    start = place_start
+    end = place_end
     
     # Perform A* search and get path information
-    a_star(G, start, end)
-    path_info = reconstruct_path(G, start, end)
+    a_star_path = a_star(G, start, end)
     
+    # Ensure a_star_path is initialized as a dictionary
+    if a_star_path is None:
+        a_star_path = {}
+
     # Create unique filenames for images
     a_star_image_filename = f"a_star_{start}_{end}.png"
     a_star_image_path = os.path.join(IMAGE_DIR, a_star_image_filename)
+    plot_graph(G, filename=a_star_image_path)
+
+    path_info = reconstruct_path(G, start, end)
+    
+    if path_info is None:
+        path_info = {}
     
     path_image_filename = f"path_{start}_{end}.png"
     path_image_path = os.path.join(IMAGE_DIR, path_image_filename)
     
     # Plot graphs and save images
-    plot_graph(G, filename=a_star_image_path)
     plot_graph(G, filename=path_image_path)
     
     # Update path_info with image URLs
-    path_info["a_star_image"] = f'/image/{a_star_image_filename}'
+    a_star_path["a_star_image"] = f'/image/{a_star_image_filename}'
     path_info["path_image"] = f'/image/{path_image_filename}'
     
-    return render_template('route.html', path_info=path_info)
+    # Combine both dictionaries to pass to the template
+    context = {
+        "a_star_path": a_star_path,
+        "path_info": path_info
+    }
+    
+    return render_template('route.html', **context)
 
 @app.route('/image/<filename>')
 def get_image(filename):

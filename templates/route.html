@@ -1,0 +1,46 @@
+<!-- route.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Information</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .image-container {
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold mb-4">Route Information</h2>
+        
+        <!-- A* Path Information -->
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <h3 class="text-lg font-bold mb-2">A* Path Information</h3>
+            <p><strong>Start Node:</strong> {{ a_star_path.start_node }}</p>
+            <p><strong>End Node:</strong> {{ a_star_path.end_node }}</p>
+            <p><strong>Path Length:</strong> {{ a_star_path.path_length }}</p>
+        </div>
+
+        <!-- A* Path Image -->
+        <div class="image-container">
+            <h3 class="text-lg font-bold mb-2">A* Path Image</h3>
+            <img src="{{ a_star_path.a_star_image }}" class="w-[900px]" alt="A* Path Image">
+        </div>
+
+        <!-- Graph Path Image -->
+        <div class="image-container">
+            <h3 class="text-lg font-bold mb-2">Graph Path Image</h3>
+            <img src="{{ path_info.path_image }}" class="w-[900px]" alt="Graph Path Image">
+        </div>
+    </div>
+</body>
+</html>
