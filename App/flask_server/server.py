@@ -18,7 +18,7 @@ os.makedirs(IMAGE_DIR, exist_ok=True)
 
 @app.route('/')
 def index():
-    return 'Welcome to the prototype server!'
+    return render_template('./src/index.tsx')
 
 @app.route('/run_algorithm')
 def run_algorithm():
