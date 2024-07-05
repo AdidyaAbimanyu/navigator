@@ -24,22 +24,14 @@
         
         <!-- A* Path Information -->
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <h3 class="text-lg font-bold mb-2">A* Path Information</h3>
-            <p><strong>Start Node:</strong> {{ a_star_path.start_node }}</p>
-            <p><strong>End Node:</strong> {{ a_star_path.end_node }}</p>
-            <p><strong>Path Length:</strong> {{ a_star_path.path_length }}</p>
-        </div>
-
-        <!-- A* Path Image -->
-        <div class="image-container">
             <h3 class="text-lg font-bold mb-2">A* Path Image</h3>
             <img src="{{ a_star_path.a_star_image }}" class="w-[900px]" alt="A* Path Image">
         </div>
-
-        <!-- Graph Path Image -->
-        <div class="image-container">
-            <h3 class="text-lg font-bold mb-2">Graph Path Image</h3>
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-4">
+            <h3 class="text-lg font-bold mb-2">Shortest Path Image</h3>
             <img src="{{ path_info.path_image }}" class="w-[900px]" alt="Graph Path Image">
+            <p class=""><strong>Distance</strong>: {{ path_info.dist }}km</p>
+            <p class=""><strong>Avg. Travel Time</strong>: {{ path_info.speed }} Minute(s)</p>
         </div>
     </div>
 </body>

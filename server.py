@@ -1,5 +1,4 @@
 import os
-import matplotlib.pyplot as plt
 from flask import Flask, render_template, send_file, jsonify, request
 from prototype import *
 from city_nodes import city_node_map  # Import city_node_map
@@ -27,6 +26,8 @@ def send_city():
     global G
     global place_start
     global place_end
+    global start_label
+    global end_label
     
     # Retrieve start and end nodes from city_node_map
     place_north = city_node_map[selected_city]["north"]
@@ -35,6 +36,8 @@ def send_city():
     place_west = city_node_map[selected_city]["west"]
     place_start = city_node_map[selected_city]["start"]
     place_end = city_node_map[selected_city]["end"]
+    start_label = city_node_map[selected_city]["orig_name"]
+    end_label = city_node_map[selected_city]["dest_name"]
 
     
     G = load_graph(place_north, place_south, place_east, place_west)
@@ -45,9 +48,11 @@ def route():
     # Use the start and end nodes retrieved based on the city
     start = place_start
     end = place_end
+    label_start = start_label
+    label_end = end_label
     
     # Perform A* search and get path information
-    a_star_path = a_star(G, start, end)
+    a_star_path = a_star(G, start, end, label_start, label_end)
     
     # Ensure a_star_path is initialized as a dictionary
     if a_star_path is None:
@@ -58,10 +63,13 @@ def route():
     a_star_image_path = os.path.join(IMAGE_DIR, a_star_image_filename)
     plot_graph(G, filename=a_star_image_path)
 
-    path_info = reconstruct_path(G, start, end)
+    # Get the path information and distance
+    dist, speed = reconstruct_path(G, start, end)
     
-    if path_info is None:
-        path_info = {}
+    path_info = {
+        'dist': dist,  # Store the distance in path_info
+        'speed': speed  # Store the speed in path_info
+    }
     
     path_image_filename = f"path_{start}_{end}.png"
     path_image_path = os.path.join(IMAGE_DIR, path_image_filename)
@@ -80,6 +88,7 @@ def route():
     }
     
     return render_template('route.html', **context)
+
 
 @app.route('/image/<filename>')
 def get_image(filename):
